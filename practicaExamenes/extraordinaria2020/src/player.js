@@ -12,6 +12,7 @@ export default class Sprite extends Phaser.GameObjects.Sprite {
 
         this.setScale(2);
         this.setOrigin(0, 1);
+        this.setDepth(4);
 
         this.speed = config.speed;
         this.jumping = false;
@@ -31,15 +32,16 @@ export default class Sprite extends Phaser.GameObjects.Sprite {
         scene.anims.create({
             key: 'jump',
             frames: scene.anims.generateFrameNumbers('jumpAnim', { start: 1, end: 4 }),
-            frameRate: 2,
+            frameRate: 1 ,
             repeat: 0
         });
 
         this.scene.input.keyboard.on('keydown', function (event) {
-            if (this.landed) this.jump();
+            if (this.body.onFloor()) this.jump();
         }, this);
 
         this.play('walking');
+        this.body.setVelocityX(this.speed);
     }
 
     /**
@@ -47,19 +49,18 @@ export default class Sprite extends Phaser.GameObjects.Sprite {
      */
     preUpdate(t, dt) {
 
-        super.preUpdate(t, dt);
-
-        if (this.body.velocity.x <= this.speed) this.body.setVelocityX(this.speed);
+        super.preUpdate(t, dt); 
 
         if (this.jumping && (this.iniY - this.y) < this.displayHeight * 5) {
 
-            this.body.setVelocityY(this.speed);
+            this.body.setVelocityY(- this.speed*2 );
         }
         else if (this.jumping) {
 
             this.jumping = false;
+            this.body.setVelocityY(0);
         }
-        else if (!this.landed && this.body.onFloor()) {
+        else  if (!this.landed && this.body.onFloor()) {
 
             this.landed = true;
             this.play('walking');
