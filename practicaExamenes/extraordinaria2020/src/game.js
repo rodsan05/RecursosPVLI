@@ -1,5 +1,6 @@
 import Boot from './boot.js';
 import PlayingScene from './playingscene.js';
+import UnpauseScene from './unpausescene.js';
 
 /**
  * Inicio del juego en Phaser. Creamos el archivo de configuración del juego y creamos
@@ -15,7 +16,7 @@ let config = {
         autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
     },
     pixelArt: true,
-    scene: [Boot, PlayingScene],
+    scene: [Boot, PlayingScene, UnpauseScene],
 
     //configuracion de fisicas arcade
     physics: {

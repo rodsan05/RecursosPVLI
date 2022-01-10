@@ -1,3 +1,4 @@
+import Obstacle from './obstacle.js';
 import Player from './player.js';
 
 /**
@@ -41,7 +42,7 @@ export default class PlayingScene extends Phaser.Scene {
         this.trees.displayHeight = this.scale.height/2;
         this.treesX = this.scale.width;
 
-        this.enemies = this.add.group();
+        this.obstacles = this.add.group();
 
         let playerConfig = {
             x: this.scale.width/6,
@@ -57,11 +58,43 @@ export default class PlayingScene extends Phaser.Scene {
         this.ground.displayWidth = this.scale.width * 1000000000000000000000;
         this.physics.add.existing(this.ground, true);
         this.physics.add.collider(this.ground, this.player);
+
+        this.physics.add.collider(this.player, this.obstacles, () => { this.playerDead(); });
+
+        let random = Phaser.Math.Between(2000, 4000);
+        let timer = this.time.addEvent({
+
+            delay: random,
+            callback: this.generateObstacle,
+            callbackScope: this
+        });
+    }
+
+    generateObstacle() {
+
+        let obsConfig = {
+
+            x: this.player.x + this.scale.width,
+            y: this.scale.height,
+            displayWidth: this.player.displayWidth,
+            displayHeight: this.player.displayHeight
+        };
+        let obstacle = new Obstacle(this, obsConfig);
+        this.obstacles.add(obstacle);
+
+        let random = Phaser.Math.Between(2000, 4000);
+        let timer = this.time.addEvent({
+
+            delay: random,
+            callback: this.generateObstacle,
+            callbackScope: this
+        });
     }
 
     playerDead() {
 
-        this.scene.start('playingscene');
+        this.scene.launch('unpausescene');
+        this.scene.pause(this.key);
     }
 
     createParallaxImage(count, x, scaleY, texture, scrollFactor) {

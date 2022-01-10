@@ -31,6 +31,7 @@
         this.load.image('background', 'parallax-mountain-bg.png');
         this.load.image('mountains', 'parallax-mountain-mountains.png');
         this.load.image('trees', 'parallax-mountain-foreground-trees.png');
+        this.load.image('obstacle', 'playertemp.png');
         this.load.spritesheet('jumpAnim', 'jumpAnim.png', { frameWidth: 32, frameHeight: 32 });
         this.load.spritesheet('walkingAnim', 'walkingAnim.png', { frameWidth: 32, frameHeight: 32 });
     }
